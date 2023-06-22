@@ -12,7 +12,7 @@ install-npm: ## Install via NPM
 	npm ci || npm install
 
 install-yarn: ## Install via YARN
-	yarn install --frozen-lockfile || yarn install
+	yarn install
 
 pretty: ## Do pretty code css/js
 	@echo "🚀 [Prettier] Formatting code..."
@@ -34,15 +34,10 @@ pre-commit: ## Check style code before commit
 	@echo "✅  [Prettier] Code style check passed"
 	@echo "✅  [Husky] All pre-commit hooks passed"
 
-build-prod: pretty lint ## Build for PROD project
-	@echo "🚀 [Build Production] Running ..."
-	@npx tsc && vite build
-	@echo "🎉 [Build Production] Done!"
-
-build-dev: pretty lint ## Build for DEV project
-	@echo "🚀 [Build Development] Running ..."
-	@npx vite build --mode development
-	@echo "🎉 [Build Development] Done!"
+build: pretty lint ## Build for PROD project
+	@echo "\n🚀 [Build Production] Running ..."
+	@npx tsc && npx vite build
+	@echo "\n🎉 [Build Production] Done!"
 
 preview: ## Run preview project
 	npx vite preview --host ${HOST} --port $(PORT_2)
@@ -50,4 +45,7 @@ preview: ## Run preview project
 start: ## Start the server with an optional port (e.g., make serve PORT=4040)
 	@echo "🚀 Starting server..."
 	@npx vite --host ${HOST} --port $(PORT_1)
+
+browser: ## 🚀App - Starts the App with Browser-Sync for Live Testing
+	@npx browser-sync --watch --no-notify --host $(HOST) --port $(PORT_2) dist
 

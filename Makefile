@@ -39,8 +39,5 @@ app-install-yarn: ## 🚀App - Installs YARN Required NPM Packages for the App
 app-start: ## 🚀App - Starts the App Server in Development Mode
 	docker exec -it ${CONTAINER_NAME} make -C /home/app start
 
-app-build-dev: ## 🚀App - Builds the App in Development Mode (Uncompressed Files)
-	docker exec -it ${CONTAINER_NAME} make -C /home/app build-dev
-
-app-build-prod: ## 🚀App - Builds the App in Production Mode (Compressed Files)
-	docker exec -it ${CONTAINER_NAME} make -C /home/app build-prod
+app-build: ## 🚀App - Builds the App in Production Mode (Compressed Files)
+	docker exec -it ${CONTAINER_NAME} make -C /home/app build
