@@ -1,54 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <link rel="icon" type="image/svg+xml" href="/img/favicon.png"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="stylesheet" href="/css/base.css">
-  <title>Vite for Widgets</title>
-</head>
-<body>
-<header>
-  <div class="container">
-    <h1>Home page</h1>
-  </div>
-</header>
-<main>
-  <div class="container">
-
-    <div id="accordion"></div>
-
-    <div id="slider">
-      <!-- Slider main container -->
-      <div class="swiper">
-        <!-- Additional required wrapper -->
-        <div class="swiper-wrapper">
-          <!-- Slides -->
-          <!--          <div class="swiper-slide">Slide 1</div>-->
-          <!--          <div class="swiper-slide">Slide 2</div>-->
-          <!--          <div class="swiper-slide">Slide 3</div>-->
-        </div>
-        <!-- If we need pagination -->
-        <div class="swiper-pagination"></div>
-
-        <!-- If we need navigation buttons -->
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-
-        <!-- If we need scrollbar -->
-        <div class="swiper-scrollbar"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/img/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/base.css" />
+    <title>Vite for Widgets</title>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1>Home page</h1>
       </div>
-
-    </div>
-
-  </div>
-
-</main>
-<footer>
-  <div class="container">
-    <div id="footer-content"></div>
-  </div>
-</footer>
-<script type="module" src="src/app/index.ts"></script>
-</body>
+    </header>
+    <main>
+      <div class="container">
+        <!-- example https://www.bankrate.com/loans/loan-calculator -->
+        <div id="calculator">
+          <div class="calculator__inner">
+            <div class="calculator__box calculator__calc-box">
+              <form class="calculator__form" data-calc="form">
+                <label class="form__label">
+                  <span class="label__title">Loan amount</span>
+                  <input class="label__input" type="number" name="loan-amount" value="5000" />
+                </label>
+                <label class="form__label">
+                  <span class="label__title">Loan term in years</span>
+                  <input class="label__input" type="number" name="loan-term-year" value="5" />
+                </label>
+                <label class="form__label">
+                  <span class="label__title">Loan term in months</span>
+                  <input class="label__input" type="number" name="loan-term-month" value="60" />
+                </label>
+                <div class="form__calc-row">
+                  <div class="form__calc-col">
+                    <label class="form__label">
+                      <span class="label__title">Interest rate per year</span>
+                      <input class="label__input" type="number" name="interest-rate" value="4.5" />
+                    </label>
+                  </div>
+                  <div class="form__calc-col">
+                    <button class="form__submit" type="submit">Calculate</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="calculator__box calculator__result" data-calc="result">
+              <div class="result__top">
+                <p class="result__title">Monthly Payments</p>
+                <div class="result__amount">
+                  <span class="result__currency">$</span>
+                  <span class="result__number">93.22</span>
+                </div>
+              </div>
+              <div class="result__subtotals">
+                <div class="result__subtotal">
+                  <span class="result__sub-title">Total principal paid</span>
+                  <span class="result__sub-amount">$5,000</span>
+                </div>
+                <div class="result__subtotal">
+                  <span class="result__sub-title">Total interest paid</span
+                  ><span class="result__sub-amount">$592.91</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div class="container">
+        <div id="footer-content"></div>
+      </div>
+    </footer>
+    <script type="module" src="src/app/index.ts"></script>
+  </body>
 </html>
