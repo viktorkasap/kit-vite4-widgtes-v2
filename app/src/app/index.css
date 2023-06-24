@@ -86,7 +86,7 @@
 #calculator .form__calc-col {
   display: flex;
   justify-content: center;
-  align-items: end;
+  align-items: flex-end;
 }
 
 #calculator .form__calc-col:first-of-type {
