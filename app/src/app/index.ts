@@ -2,34 +2,26 @@
 
 import './index.css';
 
-import { log } from 'shared/lib';
-
 import {
-  $principalPaid,
-  $interestPaid,
-  $interestRate,
-  $loanAmount,
   $loanTermMonth,
   $loanTermYear,
-  $monthlyPayments,
+  $loanAmount,
+  $interestRate,
   setLoanAmount,
   setInterestRate,
-  setInterestPaid,
   setLoanTermMonth,
   setLoanTermYear,
-  setMonthlyPayments,
-  setPrincipalPaid,
 } from './model';
 
-$loanTermYear.watch((state) => {
-  log('$loanTermYear', state);
-  // el.value = `${$loanTermYear.getState() * 12}`;
-});
+const watchers = (form: HTMLFormElement) => {
+  $loanTermYear.watch((state) => {
+    form['loan-term-year'].value = state;
+  });
 
-$loanTermMonth.watch((state) => {
-  log('$loanTermMonth', state);
-  // el.value = `${$loanTermYear.getState() * 12}`;
-});
+  $loanTermMonth.watch((state) => {
+    form['loan-term-month'].value = state;
+  });
+};
 
 const formHandleChange = (form: HTMLFormElement) => {
   form.addEventListener('input', (e) => {
@@ -56,10 +48,30 @@ const formHandleChange = (form: HTMLFormElement) => {
   });
 };
 
-const formSubmitHandler = (form: HTMLFormElement) => {
+const formSubmitHandle = (
+  form: HTMLFormElement,
+  monthlyPaymentsEl: HTMLSpanElement,
+  principalPaidEl: HTMLSpanElement,
+  interestPaidEl: HTMLSpanElement,
+) => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
+
+    const P = $loanAmount.getState();
+    const yearlyInterestRate = $interestRate.getState() / 100;
+    const r = yearlyInterestRate / 12;
+    const n = $loanTermYear.getState() * 12;
+
+    const M = (P * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1);
+    const totalPrincipalPaid = M * n;
+    const totalInterestPaid = totalPrincipalPaid - P;
+
+    monthlyPaymentsEl.textContent = `$${M.toFixed(2)}`;
+    principalPaidEl.textContent = `$${totalPrincipalPaid.toFixed(2)}`;
+    interestPaidEl.textContent = `$${totalInterestPaid.toFixed(2)}`;
   });
+
+  // TODO calculate result
 };
 
 const setInitialStateData = (form: HTMLFormElement) => {
@@ -98,9 +110,18 @@ const calculator = () => {
     return false;
   }
 
+  const monthlyPaymentsEl = result.querySelector<HTMLSpanElement>('[data-calc="monthly-payments"]');
+  const principalPaidEl = result.querySelector<HTMLSpanElement>('[data-calc="principal-paid"]');
+  const interestPaidEl = result.querySelector<HTMLSpanElement>('[data-calc="interest-paid"]');
+
+  if (!monthlyPaymentsEl || !principalPaidEl || !interestPaidEl) {
+    return false;
+  }
+
   formHandleChange(form);
-  formSubmitHandler(form);
+  formSubmitHandle(form, monthlyPaymentsEl, principalPaidEl, interestPaidEl);
   setInitialStateData(form);
+  watchers(form);
 
   return true;
 };
