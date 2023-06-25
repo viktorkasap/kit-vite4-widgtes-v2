@@ -2,35 +2,28 @@
 
 import './index.css';
 
-import { log } from 'shared/lib';
-
 import {
   $loanTermMonth,
-  $loanTermYear,
   $loanAmount,
   $interestRate,
   setLoanAmount,
   setInterestRate,
   setLoanTermMonth,
-  setLoanTermYear,
   $monthlyPayments,
   $principalPaid,
   $interestPaid,
   setMonthlyPayments,
   setPrincipalPaid,
   setInterestPaid,
-} from './model';
+} from './model'; // MODEL
 
-const watchers = (
+// VIEW
+const watchStateChanges = (
   form: HTMLFormElement,
   monthlyPaymentsEl: HTMLSpanElement,
   principalPaidEl: HTMLSpanElement,
   interestPaidEl: HTMLSpanElement,
 ) => {
-  $loanTermYear.watch((state) => {
-    form['loan-term-year'].value = state;
-  });
-
   $loanTermMonth.watch((state) => {
     form['loan-term-month'].value = state;
   });
@@ -49,21 +42,17 @@ const watchers = (
   });
 };
 
+// CONTROLLER
 const formHandleChange = (form: HTMLFormElement) => {
-  form.addEventListener('input', (e) => {
+  form.addEventListener('input', (e: Event) => {
     const el = e.target as HTMLInputElement;
 
     switch (el.name) {
       case 'loan-amount':
         setLoanAmount(Number(el.value));
         break;
-      case 'loan-term-year':
-        setLoanTermYear(Number(el.value));
-        setLoanTermMonth(Number(el.value) * 12);
-        break;
       case 'loan-term-month':
         setLoanTermMonth(Number(el.value));
-        setLoanTermYear(Number(el.value) / 12);
         break;
       case 'interest-rate':
         setInterestRate(Number(el.value));
@@ -75,13 +64,13 @@ const formHandleChange = (form: HTMLFormElement) => {
 };
 
 const formSubmitHandle = (form: HTMLFormElement) => {
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', (e: SubmitEvent) => {
     e.preventDefault();
 
     const P = $loanAmount.getState();
     const yearlyInterestRate = $interestRate.getState() / 100;
     const r = yearlyInterestRate / 12;
-    const n = $loanTermYear.getState() * 12;
+    const n = $loanTermMonth.getState();
 
     const M = (P * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1);
     const totalPrincipalPaid = P;
@@ -107,10 +96,6 @@ const setInitialStateData = (
         setLoanAmount(Number(value));
         break;
 
-      case key === 'loan-term-year':
-        setLoanTermYear(Number(value));
-        break;
-
       case key === 'loan-term-month':
         setLoanTermMonth(Number(value));
         break;
@@ -129,7 +114,8 @@ const setInitialStateData = (
   setInterestPaid(Number(interestPaidEl.textContent || 0));
 };
 
-const calculator = () => {
+// INIT
+const calculatorInit = (): boolean => {
   const calculator = document.getElementById('calculator');
   const form = calculator?.querySelector<HTMLFormElement>('[data-calc="form"]');
   const result = calculator?.querySelector<HTMLDivElement>('[data-calc="result"]');
@@ -149,10 +135,10 @@ const calculator = () => {
   formHandleChange(form);
   formSubmitHandle(form);
   setInitialStateData(form, monthlyPaymentsEl, principalPaidEl, interestPaidEl);
-  watchers(form, monthlyPaymentsEl, principalPaidEl, interestPaidEl);
+  watchStateChanges(form, monthlyPaymentsEl, principalPaidEl, interestPaidEl);
 
   return true;
 };
 
 // init
-calculator();
+calculatorInit();
