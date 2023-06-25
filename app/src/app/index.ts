@@ -2,6 +2,8 @@
 
 import './index.css';
 
+import { log } from 'shared/lib';
+
 import {
   $loanTermMonth,
   $loanTermYear,
@@ -11,9 +13,20 @@ import {
   setInterestRate,
   setLoanTermMonth,
   setLoanTermYear,
+  $monthlyPayments,
+  $principalPaid,
+  $interestPaid,
+  setMonthlyPayments,
+  setPrincipalPaid,
+  setInterestPaid,
 } from './model';
 
-const watchers = (form: HTMLFormElement) => {
+const watchers = (
+  form: HTMLFormElement,
+  monthlyPaymentsEl: HTMLSpanElement,
+  principalPaidEl: HTMLSpanElement,
+  interestPaidEl: HTMLSpanElement,
+) => {
   $loanTermYear.watch((state) => {
     form['loan-term-year'].value = state;
   });
@@ -21,26 +34,40 @@ const watchers = (form: HTMLFormElement) => {
   $loanTermMonth.watch((state) => {
     form['loan-term-month'].value = state;
   });
+
+  $monthlyPayments.watch((state) => {
+    log('$monthlyPayments', state);
+    monthlyPaymentsEl.textContent = `${state.toFixed(2)}`;
+  });
+
+  $principalPaid.watch((state) => {
+    const newStateValue = state < 1000 ? state * 1000 : state;
+    principalPaidEl.textContent = `${newStateValue.toLocaleString('en-US')}`;
+  });
+
+  $interestPaid.watch((state) => {
+    interestPaidEl.textContent = `${state}`;
+  });
 };
 
 const formHandleChange = (form: HTMLFormElement) => {
   form.addEventListener('input', (e) => {
     const el = e.target as HTMLInputElement;
 
-    switch (true) {
-      case el.name === 'loan-amount':
+    switch (el.name) {
+      case 'loan-amount':
         setLoanAmount(Number(el.value));
         break;
-      case el.name === 'loan-term-year':
+      case 'loan-term-year':
         setLoanTermYear(Number(el.value));
         setLoanTermMonth(Number(el.value) * 12);
         break;
-      case el.name === 'loan-term-month':
+      case 'loan-term-month':
         setLoanTermMonth(Number(el.value));
         setLoanTermYear(Number(el.value) / 12);
         break;
-      case el.name === 'interest-rate':
-        setLoanTermMonth(Number(el.value));
+      case 'interest-rate':
+        setInterestRate(Number(el.value));
         break;
       default:
         return false;
@@ -48,12 +75,7 @@ const formHandleChange = (form: HTMLFormElement) => {
   });
 };
 
-const formSubmitHandle = (
-  form: HTMLFormElement,
-  monthlyPaymentsEl: HTMLSpanElement,
-  principalPaidEl: HTMLSpanElement,
-  interestPaidEl: HTMLSpanElement,
-) => {
+const formSubmitHandle = (form: HTMLFormElement) => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
 
@@ -63,18 +85,21 @@ const formSubmitHandle = (
     const n = $loanTermYear.getState() * 12;
 
     const M = (P * (r * Math.pow(1 + r, n))) / (Math.pow(1 + r, n) - 1);
-    const totalPrincipalPaid = M * n;
-    const totalInterestPaid = totalPrincipalPaid - P;
+    const totalPrincipalPaid = P;
+    const totalInterestPaid = M * n - P;
 
-    monthlyPaymentsEl.textContent = `$${M.toFixed(2)}`;
-    principalPaidEl.textContent = `$${totalPrincipalPaid.toFixed(2)}`;
-    interestPaidEl.textContent = `$${totalInterestPaid.toFixed(2)}`;
+    setMonthlyPayments(Number(M.toFixed(2)));
+    setPrincipalPaid(Number(totalPrincipalPaid.toFixed(3)));
+    setInterestPaid(Number(totalInterestPaid.toFixed(2)));
   });
-
-  // TODO calculate result
 };
 
-const setInitialStateData = (form: HTMLFormElement) => {
+const setInitialStateData = (
+  form: HTMLFormElement,
+  monthlyPaymentsEl: HTMLSpanElement,
+  principalPaidEl: HTMLSpanElement,
+  interestPaidEl: HTMLSpanElement,
+) => {
   const formData = new FormData(form);
 
   for (const [key, value] of formData) {
@@ -99,6 +124,10 @@ const setInitialStateData = (form: HTMLFormElement) => {
         return false;
     }
   }
+
+  setMonthlyPayments(Number(monthlyPaymentsEl.textContent));
+  setPrincipalPaid(Number(principalPaidEl.textContent));
+  setInterestPaid(Number(interestPaidEl.textContent));
 };
 
 const calculator = () => {
@@ -119,9 +148,9 @@ const calculator = () => {
   }
 
   formHandleChange(form);
-  formSubmitHandle(form, monthlyPaymentsEl, principalPaidEl, interestPaidEl);
-  setInitialStateData(form);
-  watchers(form);
+  formSubmitHandle(form);
+  setInitialStateData(form, monthlyPaymentsEl, principalPaidEl, interestPaidEl);
+  watchers(form, monthlyPaymentsEl, principalPaidEl, interestPaidEl);
 
   return true;
 };
