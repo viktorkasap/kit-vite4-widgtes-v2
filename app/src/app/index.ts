@@ -36,7 +36,6 @@ const watchers = (
   });
 
   $monthlyPayments.watch((state) => {
-    log('$monthlyPayments', state);
     monthlyPaymentsEl.textContent = `${state.toFixed(2)}`;
   });
 
