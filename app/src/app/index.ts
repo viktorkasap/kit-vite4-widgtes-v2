@@ -124,9 +124,9 @@ const setInitialStateData = (
     }
   }
 
-  setMonthlyPayments(Number(monthlyPaymentsEl.textContent));
-  setPrincipalPaid(Number(principalPaidEl.textContent));
-  setInterestPaid(Number(interestPaidEl.textContent));
+  setMonthlyPayments(Number(monthlyPaymentsEl.textContent || 0));
+  setPrincipalPaid(Number(principalPaidEl.textContent || 0));
+  setInterestPaid(Number(interestPaidEl.textContent || 0));
 };
 
 const calculator = () => {
