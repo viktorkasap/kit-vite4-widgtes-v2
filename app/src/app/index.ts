@@ -132,6 +132,11 @@ const calculatorInit = (): boolean => {
     return false;
   }
 
+  // TODO или как вариант делать проверку на наличие элементов на странице
+  //  для этого надо сделать const elements = {....}
+  //  и используя Object.values(elements).each((element) => element)
+  //  или for(const element of Object.values(elements)) {...return false};
+
   formHandleChange(form);
   formSubmitHandle(form);
   setInitialStateData(form, monthlyPaymentsEl, principalPaidEl, interestPaidEl);
