@@ -1,3 +1,6 @@
 node_modules
 public
 dist
+postcss.config.js
+rollup.config.js
+vite.config.ts
