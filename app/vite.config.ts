@@ -3,11 +3,6 @@ import rollupConfig from './rollup.config';
 
 export default {
   base: './',
-  server: {
-    // host: true,
-    // strictPort: true,
-    // watch: { usePolling: true },
-  },
   build: {
     cssCodeSplit: true, // false - создаст отдельный файл /css/styles.css, true - вставляет стили в бандл js
     emptyOutDir: true,
