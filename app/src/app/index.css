@@ -5,23 +5,23 @@
 /* region base */
 #calculator {
   margin-top: 4rem;
-}
 
-#calculator * {
-  font-family: 'Poppins', sans-serif;
-}
+  & * {
+    font-family: 'Poppins', sans-serif;
+  }
 
-#calculator p {
-  margin: 0;
-  padding: 0;
-}
+  & p {
+    margin: 0;
+    padding: 0;
+  }
 
-#calculator input {
-  width: 100%;
-}
+  & input {
+    width: 100%;
+  }
 
-#calculator input[type='number'] {
-  -moz-appearance: textfield;
+  & input[type='number'] {
+    -moz-appearance: textfield;
+  }
 }
 
 #calculator input[type='number']::-webkit-inner-spin-button,

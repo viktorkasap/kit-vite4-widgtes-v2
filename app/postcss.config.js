@@ -3,5 +3,6 @@ module.exports = {
     require('autoprefixer')({
       grid: 'autoplace',
     }),
+    require('postcss-nested'),
   ],
 };
