@@ -1,24 +1,24 @@
-### Пример использования функций
-Пример скрипта который будет добавлять необходимые скрипты на страницу.
-Это не обязательно виджеты (widgets), может быть любое назначение, например целая страница
+### Example of using functions
+An example of a script that will add the necessary scripts to a page.
+They don't have to be widgets, they can be any purpose, for example a whole page
 ```js
 // index.js
 function addScriptsForWidgets(widgets) {
-  // Проходим по каждому виджету
+  // Go through each widget
   for (let widget of widgets) {
-    // Если на странице есть элемент с атрибутом data-widget, значение которого совпадает с именем виджета
+    // If the page has an element with the data-widget attribute, the value of which matches the widget name
     if (document.querySelector(`[data-widget="${widget.name}"]`)) {
-      // Создаем новый элемент script
+      // Create a new script element
       let script = document.createElement('script');
-      // Устанавливаем атрибут src
+      // Set the src attribute
       script.src = widget.scriptUrl;
-      // Добавляем скрипт в футер
+      // Add the script to the footer
       document.body.appendChild(script);
     }
   }
 }
 
-// Использование функции
+// Using the function
 addScriptsForWidgets([
   {name: 'tabs', scriptUrl: 'https://example.com/source/url_to_tabs_script.js'},
   {name: 'slider', scriptUrl: 'https://example.com/source/url_to_slider_script.js'}
