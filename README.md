@@ -20,7 +20,7 @@ function addScriptsForWidgets(widgets) {
 
 // Using the function
 addScriptsForWidgets([
-  {name: 'tabs', scriptUrl: 'https://example.com/source/url_to_tabs_script.js'},
-  {name: 'slider', scriptUrl: 'https://example.com/source/url_to_slider_script.js'}
+  {name: 'tabs', scriptUrl: 'https://example.com/source/<url_to_tabs_script>.js'},
+  {name: 'slider', scriptUrl: 'https://example.com/source/<url_to_slider_script>.js'}
 ]);
 ```
