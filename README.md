@@ -24,3 +24,7 @@ addScriptsForWidgets([
   {name: 'slider', scriptUrl: 'https://example.com/source/<url_to_slider_script>.js'}
 ]);
 ```
+
+### Makefile For Windows
+1) Install choco according to the instructions - https://jcutrer.com/windows/install-chocolatey-choco-windows10.
+2) In PowerShell run the command `choco install make`
